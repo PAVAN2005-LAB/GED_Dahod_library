@@ -1,0 +1,33 @@
+COLLEGE LIBRARY — Book Return Reminder
+========================================
+
+Hi {{ student_name }},
+
+This is a friendly reminder that the book you borrowed is due for return today.
+
+BOOK DETAILS
+------------
+  Title:          {{ book_title }}
+  Book ID:        {{ book_id }}
+  Shelf Location: {{ shelf_location }}
+  Issue Date:     {{ issue_date }}
+  Due Date:       {{ due_date }}
+
+YOUR DETAILS
+------------
+  Name:          {{ student_name }}
+  Enrollment ID: {{ enrollment_id }}
+
+⚠️  Please note: Failure to return the book on time may result in
+late fees as per library policy. If you have already returned
+this book, please disregard this email.
+
+Thank you for your cooperation.
+
+Warm regards,
+College Library Team
+
+---
+This is an automated email from the College Library Management System.
+Please do not reply to this email.
+© 2026 Smart College Library System

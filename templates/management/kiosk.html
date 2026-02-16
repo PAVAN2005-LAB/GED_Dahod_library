@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% block title %}Library Kiosk - Scanning{% endblock %}
+
+{% block extra_css %}
+<style>
+    .kiosk-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 60vh;
+    }
+
+    .scanner-card {
+        max-width: 600px;
+        width: 100%;
+        padding: 40px;
+        text-align: center;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .barcode-input {
+        font-size: 2rem;
+        text-align: center;
+        letter-spacing: 5px;
+        border: 2px solid #eee;
+        border-radius: 15px;
+        padding: 15px;
+        margin-top: 20px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .barcode-input:focus {
+        border-color: #764ba2;
+        box-shadow: 0 0 15px rgba(118, 75, 162, 0.2);
+        outline: none;
+    }
+
+    .scan-icon {
+        font-size: 80px;
+        color: #764ba2;
+        margin-bottom: 20px;
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+        0%,
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        50% {
+            transform: scale(1.05);
+            opacity: 0.8;
+        }
+    }
+
+    .status-msg {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-top: 20px;
+    }
+
+    .feedback-welcome {
+        color: #2ecc71;
+    }
+
+    .feedback-goodbye {
+        color: #e74c3c;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="kiosk-container">
+    <div class="scanner-card animate-fade-in">
+        <div class="scan-icon">
+            <i class="fas fa-barcode"></i>
+        </div>
+        <h1 class="mb-3">GECDahod Library Kiosk</h1>
+        <p class="text-muted mb-4">Scan your student ID to enter or exit the library.</p>
+
+        {% if messages %}
+        {% for message in messages %}
+        <div
+            class="display-5 fw-bold mb-4 animate-fade-in text-{% if message.tags == 'success' %}success{% else %}danger{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <form method="POST" id="barcode-form">
+            {% csrf_token %}
+
+            <!-- Camera Toggle -->
+            <div class="mb-4">
+                <button type="button" id="start-camera-btn" class="btn btn-outline-primary btn-lg w-100">
+                    <i class="fas fa-camera me-2"></i>Open Camera
+                </button>
+            </div>
+
+            <!-- Scanner Viewport (Hidden by default) -->
+            <div id="reader" style="width: 100%; display: none;" class="mb-4"></div>
+
+            <input type="text" name="barcode" id="barcode-input" class="form-control barcode-input" autocomplete="off"
+                placeholder="SCAN BARCODE" autofocus maxlength="50" aria-label="Barcode Scanner Input">
+            <button type="submit" style="display: none;">Submit</button>
+        </form>
+
+        <div class="mt-4">
+            <span class="badge bg-light text-dark p-2">
+                <i class="fas fa-info-circle me-1"></i> Cursor auto-focuses for scanner
+            </span>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script>
+    (() => {
+        'use strict';
+
+        const barcodeInput = document.getElementById('barcode-input');
+        const startCameraBtn = document.getElementById('start-camera-btn');
+        const readerDiv = document.getElementById('reader');
+        let html5QrcodeScanner = null;
+
+        // Focus Logic
+        if (barcodeInput) {
+            function focusInput() {
+                // Don't steal focus if interacting with the scanner
+                if (document.activeElement !== barcodeInput && !document.getElementById('reader').contains(document.activeElement)) {
+                    barcodeInput.focus();
+                }
+            }
+
+            // Focus on page load
+            focusInput();
+
+            // Re-focus whenever the user clicks anywhere on the page, unless clicking scanner controls
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('#reader') && !e.target.closest('#start-camera-btn')) {
+                    focusInput();
+                }
+            });
+
+            // Re-focus when the page becomes visible again
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) {
+                    focusInput();
+                }
+            });
+        }
+
+        // Scanner Logic
+        if (startCameraBtn) {
+            startCameraBtn.addEventListener('click', () => {
+                if (readerDiv.style.display === 'none') {
+                    readerDiv.style.display = 'block';
+                    startCameraBtn.innerHTML = '<i class="fas fa-camera-slash me-2"></i>Stop Camera';
+                    startCameraBtn.classList.replace('btn-outline-primary', 'btn-outline-danger');
+
+                    html5QrcodeScanner = new Html5QrcodeScanner(
+                        "reader",
+                        { fps: 10, qrbox: { width: 250, height: 150 } },
+                        /* verbose= */ false
+                    );
+
+                    html5QrcodeScanner.render((decodedText, decodedResult) => {
+                        // Success callback
+                        if (barcodeInput) {
+                            barcodeInput.value = decodedText;
+                            document.getElementById('barcode-form').submit();
+
+                            // Stop scanning after success
+                            html5QrcodeScanner.clear().then(() => {
+                                readerDiv.style.display = 'none';
+                                startCameraBtn.innerHTML = '<i class="fas fa-camera me-2"></i>Open Camera';
+                                startCameraBtn.classList.replace('btn-outline-danger', 'btn-outline-primary');
+                            });
+                        }
+                    }, (errorMessage) => {
+                        // Parse error, ignore
+                    });
+
+                } else {
+                    // Stop Camera
+                    if (html5QrcodeScanner) {
+                        html5QrcodeScanner.clear().then(() => {
+                            readerDiv.style.display = 'none';
+                            startCameraBtn.innerHTML = '<i class="fas fa-camera me-2"></i>Open Camera';
+                            startCameraBtn.classList.replace('btn-outline-danger', 'btn-outline-primary');
+                        }).catch(error => {
+                            console.error("Failed to clear html5QrcodeScanner. ", error);
+                        });
+                    }
+                }
+            });
+        }
+    })();
+</script>
+{% endblock %}

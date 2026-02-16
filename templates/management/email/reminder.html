@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Book Return Reminder</title>
+</head>
+
+<body
+    style="margin: 0; padding: 0; background-color: #f4f5f7; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0"
+        style="background-color: #f4f5f7; padding: 40px 0;">
+        <tr>
+            <td align="center">
+                <!-- Main Card -->
+                <table role="presentation" width="600" cellspacing="0" cellpadding="0"
+                    style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+
+                    <!-- Header -->
+                    <tr>
+                        <td
+                            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 35px 40px; text-align: center;">
+                            <h1
+                                style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 600; letter-spacing: 0.5px;">
+                                📚 College Library
+                            </h1>
+                            <p style="margin: 8px 0 0; color: rgba(255,255,255,0.85); font-size: 14px;">
+                                Book Return Reminder
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Greeting -->
+                    <tr>
+                        <td style="padding: 35px 40px 10px;">
+                            <h2 style="margin: 0; color: #2d3436; font-size: 20px; font-weight: 600;">
+                                Hi {{ student_name }},
+                            </h2>
+                        </td>
+                    </tr>
+
+                    <!-- Message Body -->
+                    <tr>
+                        <td style="padding: 10px 40px 25px;">
+                            <p style="margin: 0; color: #636e72; font-size: 15px; line-height: 1.7;">
+                                This is a friendly reminder that the book you borrowed from the college library is
+                                <strong style="color: #e74c3c;">due for return today</strong>.
+                                Please return it at your earliest convenience to avoid any late fines.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Book Details Card -->
+                    <tr>
+                        <td style="padding: 0 40px 30px;">
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0"
+                                style="background-color: #f8f9fa; border-radius: 10px; border: 1px solid #eee;">
+                                <tr>
+                                    <td style="padding: 25px;">
+                                        <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td style="padding-bottom: 14px; border-bottom: 1px solid #e9ecef;">
+                                                    <span
+                                                        style="color: #b2bec3; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Book
+                                                        Title</span><br>
+                                                    <strong style="color: #2d3436; font-size: 16px;">{{ book_title
+                                                        }}</strong>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td
+                                                    style="padding-top: 14px; padding-bottom: 14px; border-bottom: 1px solid #e9ecef;">
+                                                    <table role="presentation" width="100%" cellspacing="0"
+                                                        cellpadding="0">
+                                                        <tr>
+                                                            <td width="50%">
+                                                                <span
+                                                                    style="color: #b2bec3; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Book
+                                                                    ID</span><br>
+                                                                <strong style="color: #2d3436; font-size: 14px;">{{
+                                                                    book_id }}</strong>
+                                                            </td>
+                                                            <td width="50%">
+                                                                <span
+                                                                    style="color: #b2bec3; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Shelf
+                                                                    Location</span><br>
+                                                                <strong style="color: #2d3436; font-size: 14px;">{{
+                                                                    shelf_location }}</strong>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding-top: 14px;">
+                                                    <table role="presentation" width="100%" cellspacing="0"
+                                                        cellpadding="0">
+                                                        <tr>
+                                                            <td width="50%">
+                                                                <span
+                                                                    style="color: #b2bec3; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Issue
+                                                                    Date</span><br>
+                                                                <strong style="color: #2d3436; font-size: 14px;">{{
+                                                                    issue_date }}</strong>
+                                                            </td>
+                                                            <td width="50%">
+                                                                <span
+                                                                    style="color: #b2bec3; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Due
+                                                                    Date</span><br>
+                                                                <strong style="color: #e74c3c; font-size: 14px;">{{
+                                                                    due_date }}</strong>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Student Info -->
+                    <tr>
+                        <td style="padding: 0 40px 25px;">
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0"
+                                style="background-color: #eef1ff; border-radius: 10px; border-left: 4px solid #667eea;">
+                                <tr>
+                                    <td style="padding: 18px 20px;">
+                                        <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td width="50%">
+                                                    <span style="color: #636e72; font-size: 12px;">Student
+                                                        Name</span><br>
+                                                    <strong style="color: #2d3436; font-size: 14px;">{{ student_name
+                                                        }}</strong>
+                                                </td>
+                                                <td width="50%">
+                                                    <span style="color: #636e72; font-size: 12px;">Enrollment
+                                                        ID</span><br>
+                                                    <strong style="color: #2d3436; font-size: 14px;">{{ enrollment_id
+                                                        }}</strong>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Warning -->
+                    <tr>
+                        <td style="padding: 0 40px 30px;">
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0"
+                                style="background-color: #fff5f5; border-radius: 10px; border-left: 4px solid #e74c3c;">
+                                <tr>
+                                    <td style="padding: 15px 20px;">
+                                        <p style="margin: 0; color: #c0392b; font-size: 13px; line-height: 1.6;">
+                                            ⚠️ <strong>Please note:</strong> Failure to return the book on time may
+                                            result in late fees
+                                            as per the library policy. If you have already returned this book, please
+                                            disregard this email.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Regards -->
+                    <tr>
+                        <td style="padding: 0 40px 35px;">
+                            <p style="margin: 0; color: #636e72; font-size: 14px; line-height: 1.7;">
+                                Thank you for your cooperation.<br><br>
+                                Warm regards,<br>
+                                <strong style="color: #2d3436;">College Library Team</strong>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td
+                            style="background-color: #f8f9fa; padding: 25px 40px; text-align: center; border-top: 1px solid #eee;">
+                            <p style="margin: 0; color: #b2bec3; font-size: 12px; line-height: 1.6;">
+                                This is an automated email from the College Library Management System.<br>
+                                Please do not reply to this email.
+                            </p>
+                            <p style="margin: 10px 0 0; color: #dfe6e9; font-size: 11px;">
+                                © 2026 Smart College Library System
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

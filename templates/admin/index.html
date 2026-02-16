@@ -1,0 +1,18 @@
+{% extends "admin/index.html" %}
+
+{% block content %}
+<!-- Reports Button -->
+<div style="margin-bottom: 25px;">
+    <a href="{% url 'reports_dashboard' %}" style="display: inline-flex; align-items: center; padding: 14px 30px;
+              background: linear-gradient(135deg, #28a745, #218838);
+              color: #fff; text-decoration: none; border-radius: 10px;
+              font-size: 16px; font-weight: 600;
+              box-shadow: 0 4px 15px rgba(40,167,69,0.25);
+              transition: transform 0.2s, box-shadow 0.2s;">
+        <span style="font-size: 22px; margin-right: 10px;">📥</span>
+        Download Reports (Entry-Exit / Book Issues)
+    </a>
+</div>
+
+{{ block.super }}
+{% endblock %}

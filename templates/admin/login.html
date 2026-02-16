@@ -1,0 +1,133 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<style>
+    body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    #container {
+        width: 100%;
+        max-width: 400px;
+        background: white;
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    #header {
+        display: none;
+    }
+
+    .form-row {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: border 0.3s;
+    }
+
+    input:focus {
+        border-color: #4f46e5;
+        outline: none;
+    }
+
+    .submit-row {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    input[type="submit"] {
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        width: 100%;
+        transition: transform 0.2s;
+    }
+
+    input[type="submit"]:hover {
+        transform: translateY(-2px);
+    }
+
+    .errornote {
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border-left: 4px solid #ef4444;
+        font-size: 14px;
+    }
+
+    .brand-logo {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 24px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="brand-logo">📚 GECDahod Library Login</div>
+
+{% if form.errors and not form.non_field_errors %}
+<p class="errornote">
+    {% if form.errors.items|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please
+    correct the errors below." %}{% endif %}
+</p>
+{% endif %}
+
+{% if form.non_field_errors %}
+{% for error in form.non_field_errors %}
+<p class="errornote">
+    🛑 <strong>Login Failed:</strong> {{ error }}
+</p>
+{% endfor %}
+{% endif %}
+
+<form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+    <div class="form-row">
+        <label for="id_username">Username / Email</label>
+        {{ form.username }}
+        {{ form.username.errors }}
+    </div>
+    <div class="form-row">
+        <label for="id_password">Password</label>
+        {{ form.password }}
+        {{ form.password.errors }}
+        <input type="hidden" name="next" value="{{ next }}">
+    </div>
+    <div class="submit-row">
+        <input type="submit" value="{% trans 'Log in' %}">
+    </div>
+</form>
+{% endblock %}
