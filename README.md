@@ -89,22 +89,11 @@ python manage.py initadmin  # Custom command to sync .env admin to DB
 python manage.py runserver
 ```
 
-## 🌍 Hosting Recommendations
+## 🌍 Hosting Recommendations(any three of them)
 
-To make this system live, you can host it on:
+I used **PythonAnywhere** you can also use  **Railway / Render**,**DigitalOcean / Linode**
 
-1. **PythonAnywhere** (Recommended for Beginners):
-   - Very easy Django setup.
-   - Provides a free tier (low traffic).
-   - Good for small college projects.
 
-2. **Railway / Render**:
-   - Modern "Infrastructure as Code" platforms.
-   - Fast deployments from GitHub.
-
-3. **DigitalOcean / Linode**:
-   - For high performance (VPS).
-   - Requires setting up Nginx and Gunicorn.
 
 ## 🛠️ Developer & Support
 Developed for **GECDahod Library System**. For technical support or contribution, contact the lead developer.
