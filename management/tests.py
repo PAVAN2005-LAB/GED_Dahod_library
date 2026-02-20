@@ -28,7 +28,7 @@ class BookModelTest(TestCase):
 
     def setUp(self):
         self.book = Book.objects.create(
-            book_id='BK-101',
+            access_code='BK-101',
             title='Clean Code',
             shelf_location='A-1'
         )
@@ -77,7 +77,7 @@ class TransactionModelTest(TestCase):
             department='CSE'
         )
         self.book = Book.objects.create(
-            book_id='BK-101',
+            access_code='BK-101',
             title='Clean Code',
             shelf_location='A-1'
         )
