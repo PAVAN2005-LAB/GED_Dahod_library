@@ -33,5 +33,7 @@ env/
 # Reports
 *.xlsx
 *.csv
+!example_students.csv
+!example_books.csv
 !management/management/commands/import_data.py # Keep the command but ignore data files
 reports/

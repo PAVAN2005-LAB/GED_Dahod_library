@@ -1,0 +1,4 @@
+enrollment_id,name,email,mobile_no,department
+STU001,Pavan Kumar,pavan@example.com,9876543210,Computer
+STU002,John Doe,john@example.com,1234567890,Mechanical
+STU003,Jane Smith,jane@example.com,1122334455,Civil
