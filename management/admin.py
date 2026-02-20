@@ -36,6 +36,17 @@ class LibraryLogAdmin(admin.ModelAdmin):
     readonly_fields = ('entry_time',)
     autocomplete_fields = ['student']
     list_per_page = 25
+    actions = ['clear_old_logs']
+
+    @admin.action(description='Clear logs older than 30 days')
+    def clear_old_logs(self, request, queryset):
+        from django.utils import timezone
+        from datetime import timedelta
+        cutoff = timezone.now() - timedelta(days=30)
+        old_logs = LibraryLog.objects.filter(entry_time__lt=cutoff)
+        count = old_logs.count()
+        old_logs.delete()
+        self.message_user(request, f"Successfully deleted {count} logs older than 30 days.")
 
     @admin.display(boolean=True, description='Currently Inside')
     def is_inside(self, obj):
