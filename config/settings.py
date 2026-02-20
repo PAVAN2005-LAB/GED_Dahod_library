@@ -53,7 +53,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -62,7 +61,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 
 ROOT_URLCONF = 'config.urls'
 
@@ -170,14 +169,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',
     'http://127.0.0.1:8000',
-    'http://localhost:8001',
-    'http://127.0.0.1:8001',
 ]
-
-# When running on LAN, you might need to add your IP here if you face CSRF errors
-# Example: 'http://192.168.1.XX:8000'
-if DEBUG:
-    CSRF_TRUSTED_ORIGINS += ['http://' + host for host in ALLOWED_HOSTS if host != '*' and '.' in host]
 
 
 # Session security
