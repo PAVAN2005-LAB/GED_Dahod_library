@@ -10,16 +10,17 @@ This is the **Production** branch. This branch is configured to run on your coll
    ```
 
 2. **Setup Environment:**
+   ```
    - Install dependencies: `pip install -r requirements.txt waitress whitenoise`
    - Create a `.env` file from `.env.example`.
    - **Crucial:** Set `DJANGO_DEBUG=False` and `DJANGO_ALLOWED_HOSTS=*`.
-
-3. **Prepare Static Files:**
+   ```
+4. **Prepare Static Files:**
    ```bash
    python manage.py collectstatic --noinput
    ```
 
-4. **Start the Server (Admin Privileges required for Port 80):**
+5. **Start the Server (Admin Privileges required for Port 80):**
    ```bash
    python run_server.py
    ```
