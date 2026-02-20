@@ -99,3 +99,5 @@ I used **PythonAnywhere** you can also use  **Railway / Render**,**DigitalOcean 
 Developed for **GEC Dahod Library**. For technical support or contribution, contact the lead developer.
 
 **Email:** pavan.yadav.sde@gmail.com | 230180107045@gecdahod.ac.in
+
+**Email:** 230180107070@gecdahod.ac.in | Subodh3213G
