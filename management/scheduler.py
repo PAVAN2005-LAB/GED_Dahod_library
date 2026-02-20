@@ -1,7 +1,7 @@
 import logging
 from apscheduler.schedulers.background import BackgroundScheduler
 from django_apscheduler.jobstores import DjangoJobStore, register_events
-from .tasks import delete_old_logs, send_due_reminders
+from .tasks import send_due_reminders
 
 logger = logging.getLogger('management')
 
@@ -11,16 +11,7 @@ def start():
     scheduler = BackgroundScheduler(timezone='Asia/Kolkata')
     scheduler.add_jobstore(DjangoJobStore(), "default")
 
-    # Task A: Daily at Midnight — delete logs older than 15 days
-    scheduler.add_job(
-        delete_old_logs,
-        trigger="cron",
-        hour=0,
-        minute=0,
-        id="delete_old_logs",
-        max_instances=1,
-        replace_existing=True,
-    )
+
 
     # Task B: Daily at 8 AM — send due book reminders
     scheduler.add_job(
@@ -35,4 +26,4 @@ def start():
 
     register_events(scheduler)
     scheduler.start()
-    logger.info("APScheduler started with 2 scheduled tasks.")
+    logger.info("APScheduler started with 1 scheduled task.")

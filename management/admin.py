@@ -3,10 +3,6 @@ from django.contrib.auth.models import User, Group
 from .models import Student, Book, LibraryLog, Transaction
 
 
-# ── Unregister clutter ──────────────────────────────────────
-admin.site.unregister(Group)
-admin.site.unregister(User)
-
 # ── Customize Admin Site Branding ───────────────────────────
 admin.site.site_header = '📚 GECDahod Library'
 admin.site.site_title = 'GECDahod Library Admin'
@@ -16,18 +12,18 @@ admin.site.index_title = 'Library Management Panel'
 # ── Student Admin ───────────────────────────────────────────
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ('enrollment_id', 'name', 'email', 'mobile_no', 'department', 'semester')
+    list_display = ('enrollment_id', 'name', 'email', 'mobile_no', 'department')
     search_fields = ('enrollment_id', 'name', 'email', 'mobile_no')
-    list_filter = ('department', 'semester')
+    list_filter = ('department',)
     list_per_page = 25
 
 
 # ── Book Admin ──────────────────────────────────────────────
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ('book_id', 'title', 'shelf_location', 'status', 'current_holder')
+    list_display = ('access_code', 'title', 'author', 'shelf_location', 'status', 'current_holder')
     list_filter = ('status', 'shelf_location')
-    search_fields = ('book_id', 'title')
+    search_fields = ('access_code', 'title', 'author')
     list_per_page = 25
 
 
@@ -38,6 +34,7 @@ class LibraryLogAdmin(admin.ModelAdmin):
     list_filter = ('entry_time', 'exit_time')
     search_fields = ('student__name', 'student__enrollment_id')
     readonly_fields = ('entry_time',)
+    autocomplete_fields = ['student']
     list_per_page = 25
 
     @admin.display(boolean=True, description='Currently Inside')
@@ -59,10 +56,19 @@ class LibraryLogAdmin(admin.ModelAdmin):
 class TransactionAdmin(admin.ModelAdmin):
     list_display = ('student', 'book', 'issue_date', 'due_date', 'returned', 'is_overdue_display')
     list_filter = ('returned', 'issue_date', 'due_date')
-    search_fields = ('student__name', 'student__enrollment_id', 'book__title', 'book__book_id')
+    search_fields = ('student__name', 'student__enrollment_id', 'book__title', 'book__access_code')
     readonly_fields = ('issue_date',)
+    autocomplete_fields = ['student', 'book']
     list_per_page = 25
     actions = ['mark_returned']
+
+    def get_changeform_initial_data(self, request):
+        """Pre-fill due_date with 15 days from now."""
+        from django.utils import timezone
+        from datetime import timedelta
+        initial = super().get_changeform_initial_data(request)
+        initial['due_date'] = timezone.now() + timedelta(days=15)
+        return initial
 
     @admin.display(boolean=True, description='Overdue')
     def is_overdue_display(self, obj):

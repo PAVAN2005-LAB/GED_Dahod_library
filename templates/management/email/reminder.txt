@@ -8,7 +8,7 @@ This is a friendly reminder that the book you borrowed is due for return today.
 BOOK DETAILS
 ------------
   Title:          {{ book_title }}
-  Book ID:        {{ book_id }}
+  Access Code:    {{ access_code }}
   Shelf Location: {{ shelf_location }}
   Issue Date:     {{ issue_date }}
   Due Date:       {{ due_date }}

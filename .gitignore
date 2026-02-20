@@ -24,3 +24,14 @@ media/
 # OS
 Thumbs.db
 .DS_Store
+
+# Virtual Environment
+venv/
+ENV/
+env/
+
+# Reports
+*.xlsx
+*.csv
+!management/management/commands/import_data.py # Keep the command but ignore data files
+reports/

@@ -7,15 +7,14 @@ from datetime import timedelta
 class Student(models.Model):
     """Represents a student registered in the library system."""
     enrollment_id = models.CharField(
-        max_length=50,
+        max_length=12,
         primary_key=True,
         validators=[RegexValidator(
-            regex=r'^[A-Za-z0-9_-]+$',
-            message='Enrollment ID must contain only alphanumeric characters, hyphens, or underscores.'
+            regex=r'^[0-9]+$',
+            message='Enrollment ID must 12 digit no '
         )],
         help_text='Unique barcode/enrollment ID for the student.'
     )
-    SEMESTER_CHOICES = [(i, f'Semester {i}') for i in range(1, 9)]
     DEPARTMENT_CHOICES = [
         ('Computer', 'Computer'),
         ('EC', 'EC'),
@@ -35,7 +34,6 @@ class Student(models.Model):
         help_text='10-digit mobile number'
     )
     department = models.CharField(max_length=100, choices=DEPARTMENT_CHOICES)
-    semester = models.IntegerField(choices=SEMESTER_CHOICES, default=1, help_text='Current semester (1–8)')
 
     class Meta:
         ordering = ['name']
@@ -52,16 +50,18 @@ class Book(models.Model):
         ('Available', 'Available'),
         ('Issued', 'Issued'),
     ]
-    book_id = models.CharField(
+    access_code = models.CharField(
         max_length=50,
         primary_key=True,
+        verbose_name='Access Code',
         validators=[RegexValidator(
             regex=r'^[A-Za-z0-9_-]+$',
-            message='Book ID must contain only alphanumeric characters, hyphens, or underscores.'
+            message='Access Code must contain only alphanumeric characters, hyphens, or underscores.'
         )],
-        help_text='Unique barcode ID for the book.'
+        help_text='Unique barcode/Access Code for the book.'
     )
     title = models.CharField(max_length=200)
+    author = models.CharField(max_length=200, blank=True, null=True)
     shelf_location = models.CharField(max_length=100)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Available')
     current_holder = models.ForeignKey(
@@ -79,7 +79,7 @@ class Book(models.Model):
         verbose_name_plural = 'Books'
 
     def __str__(self):
-        return f"{self.title} ({self.book_id})"
+        return f"{self.title} ({self.access_code})"
 
 
 class LibraryLog(models.Model):
@@ -133,7 +133,7 @@ class Transaction(models.Model):
     def save(self, *args, **kwargs):
         # Auto-set due_date to 14 days from now on first creation
         if not self.pk and not self.due_date:
-            self.due_date = timezone.now() + timedelta(days=14)
+            self.due_date = timezone.now() + timedelta(days=15)
         super().save(*args, **kwargs)
 
     @property

@@ -38,7 +38,7 @@ def kiosk(request):
                 logger.info("Student %s checked OUT", student.enrollment_id)
             else:
                 LibraryLog.objects.create(student=student)
-                messages.success(request, f"zk Welcome, {student.name}! Access Granted.")
+                messages.success(request, f"Welcome, {student.name}! Access Granted.")
                 logger.info("Student %s checked IN", student.enrollment_id)
                 
         except Student.DoesNotExist:
@@ -60,4 +60,9 @@ def dashboard(request):
         .select_related('student')
         .order_by('-entry_time')
     )
-    return render(request, 'management/dashboard.html', {'live_logs': live_logs})
+    total_visits = LibraryLog.objects.count()
+    context = {
+        'live_logs': live_logs,
+        'total_visits': total_visits,
+    }
+    return render(request, 'management/dashboard.html', context)

@@ -9,11 +9,6 @@ from .models import LibraryLog, Transaction
 logger = logging.getLogger('management')
 
 
-def delete_old_logs():
-    """Task A: Delete all records in LibraryLog where entry_time is older than 15 days."""
-    cutoff = timezone.now() - timedelta(days=15)
-    deleted_count, _ = LibraryLog.objects.filter(entry_time__lt=cutoff).delete()
-    logger.info("Auto-cleanup: Deleted %d library logs older than 15 days.", deleted_count)
 
 
 def send_due_reminders():
@@ -35,7 +30,7 @@ def send_due_reminders():
             'student_name': tx.student.name,
             'enrollment_id': tx.student.enrollment_id,
             'book_title': tx.book.title,
-            'book_id': tx.book.book_id,
+            'access_code': tx.book.access_code,
             'shelf_location': tx.book.shelf_location,
             'issue_date': tx.issue_date.strftime('%d %b, %Y'),
             'due_date': tx.due_date.strftime('%d %b, %Y'),

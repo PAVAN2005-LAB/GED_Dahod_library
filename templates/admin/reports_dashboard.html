@@ -100,10 +100,25 @@
 
 <div class="report-container">
 
+    <!-- Shared Datalists -->
+    <datalist id="dept_options">
+        {% for dept in departments %}
+        <option value="{{ dept }}">
+            {% endfor %}
+    </datalist>
+
+
+
+    <datalist id="status_options">
+        <option value="pending">Pending (Not Returned)</option>
+        <option value="returned">Returned</option>
+        <option value="overdue">Overdue Only</option>
+    </datalist>
+
     <!-- ═══ Entry-Exit Report ═══ -->
     <div class="report-card">
         <h2>📋 Entry-Exit Report (with Duration)</h2>
-        <p class="desc">Download day-to-day entry/exit records with enrollment ID, name, department, semester, mobile,
+        <p class="desc">Download day-to-day entry/exit records with enrollment ID, name, department, mobile,
             and time duration.</p>
         <hr class="divider">
         <form method="get" action="{% url 'report_entry_exit' %}">
@@ -116,23 +131,9 @@
                     <label>To Date</label>
                     <input type="date" name="date_to">
                 </div>
-                <div>
+                <div style="grid-column: 1 / -1;">
                     <label>Department</label>
-                    <select name="department">
-                        <option value="">All Departments</option>
-                        {% for dept in departments %}
-                        <option value="{{ dept }}">{{ dept }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div>
-                    <label>Semester</label>
-                    <select name="semester">
-                        <option value="">All Semesters</option>
-                        {% for sem in semesters %}
-                        <option value="{{ sem }}">Semester {{ sem }}</option>
-                        {% endfor %}
-                    </select>
+                    <input type="text" name="department" list="dept_options" placeholder="Select or type Department...">
                 </div>
             </div>
             <button type="submit" class="btn-download">📥 Download Entry-Exit Excel</button>
@@ -155,35 +156,43 @@
                     <label>To Date</label>
                     <input type="date" name="date_to">
                 </div>
-                <div>
+                <div style="grid-column: 1 / -1;">
                     <label>Department</label>
-                    <select name="department">
-                        <option value="">All Departments</option>
-                        {% for dept in departments %}
-                        <option value="{{ dept }}">{{ dept }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div>
-                    <label>Semester</label>
-                    <select name="semester">
-                        <option value="">All Semesters</option>
-                        {% for sem in semesters %}
-                        <option value="{{ sem }}">Semester {{ sem }}</option>
-                        {% endfor %}
-                    </select>
+                    <input type="text" name="department" list="dept_options" placeholder="Select or type Department...">
                 </div>
                 <div style="grid-column: 1 / -1;">
                     <label>Book Status</label>
-                    <select name="status">
-                        <option value="">All</option>
-                        <option value="pending">Pending (Not Returned)</option>
-                        <option value="returned">Returned</option>
-                        <option value="overdue">Overdue Only</option>
-                    </select>
+                    <input type="text" name="status" list="status_options" placeholder="Select Status...">
                 </div>
             </div>
             <button type="submit" class="btn-download">📥 Download Book Issues Excel</button>
+        </form>
+    </div>
+
+    <!-- ═══ Overdue Students Report ═══ -->
+    <div class="report-card">
+        <h2>⚠️ Overdue Students Report</h2>
+        <p class="desc">Download a list of students who have overdue books, including contact details and number of
+            overdue days.</p>
+        <hr class="divider">
+        <form method="get" action="{% url 'report_overdue_students' %}">
+            <div class="filter-grid">
+                <div>
+                    <label>From Issue Date</label>
+                    <input type="date" name="date_from">
+                </div>
+                <div>
+                    <label>To Issue Date</label>
+                    <input type="date" name="date_to">
+                </div>
+                <div style="grid-column: 1 / -1;">
+                    <label>Department</label>
+                    <input type="text" name="department" list="dept_options" placeholder="Select or type Department...">
+                </div>
+            </div>
+            <button type="submit" class="btn-download"
+                style="background: linear-gradient(135deg, #dc3545, #a71d2a); box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);">📥
+                Download Overdue Students Excel</button>
         </form>
     </div>
 
