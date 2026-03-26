@@ -41,6 +41,7 @@ def api_sitemap(request):
         "Public Web Routes": {
             "root": "/",
             "kiosk": "/kiosk/",
+            "renew": "/renew/",
             "admin_login": "/admin/login/"
         },
         "API Endpoints": {
@@ -57,13 +58,6 @@ def api_sitemap(request):
             "book_issues_report": "/admin/reports/book-issues/",
             "overdue_report": "/admin/reports/overdue-students/"
         },
-        "User Auth Endpoints": {
-            "register": "/api/register/",
-            "login": "/api/login/",
-            "logout": "/api/logout/",
-            "update_password": "/api/update-password/",
-            "delete_account": "/api/delete/"
-        }
     }, status=status.HTTP_200_OK)
 
 from django.contrib.auth.models import User

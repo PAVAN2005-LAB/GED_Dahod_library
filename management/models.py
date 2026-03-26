@@ -142,3 +142,27 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f"{self.student.name} borrowed {self.book.title}"
+
+class RenewRequest(models.Model):
+    """Tracks student requests to renew an issued book."""
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Approved', 'Approved'),
+        ('Rejected', 'Rejected'),
+    ]
+    transaction = models.ForeignKey(
+        Transaction,
+        on_delete=models.CASCADE,
+        related_name='renew_requests',
+        help_text='The active issue transaction to be renewed.'
+    )
+    request_date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+
+    class Meta:
+        ordering = ['-request_date']
+        verbose_name = 'Renew Request'
+        verbose_name_plural = 'Renew Requests'
+
+    def __str__(self):
+        return f"Renew Request for '{self.transaction.book.title}' by {self.transaction.student.name}"

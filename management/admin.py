@@ -89,3 +89,28 @@ class TransactionAdmin(admin.ModelAdmin):
     def mark_returned(self, request, queryset):
         updated = queryset.filter(returned=False).update(returned=True)
         self.message_user(request, f'{updated} transaction(s) marked as returned.')
+
+from .models import RenewRequest
+from django.utils import timezone
+from datetime import timedelta
+
+@admin.register(RenewRequest)
+class RenewRequestAdmin(admin.ModelAdmin):
+    list_display = ('transaction', 'request_date', 'status', 'current_due_date')
+    list_filter = ('status', 'request_date')
+    search_fields = ('transaction__student__enrollment_id', 'transaction__book__access_code')
+    actions = ['approve_requests']
+
+    def current_due_date(self, obj):
+        return obj.transaction.due_date
+
+    @admin.action(description='👍 Approve selected renew requests (+15 days)')
+    def approve_requests(self, request, queryset):
+        for req in queryset.filter(status='Pending'):
+            # Update the underlying transaction due_date
+            req.transaction.due_date = timezone.now() + timedelta(days=15)
+            req.transaction.save()
+            # Update the request status
+            req.status = 'Approved'
+            req.save()
+        self.message_user(request, 'Selected requests have been approved and due dates extended.')

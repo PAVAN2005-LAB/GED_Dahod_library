@@ -66,3 +66,52 @@ def dashboard(request):
         'total_visits': total_visits,
     }
     return render(request, 'management/dashboard.html', context)
+
+
+from .models import Transaction, RenewRequest
+
+@require_http_methods(["GET", "POST"])
+def renew_request(request):
+    """Public portal for students to request book renewals."""
+    context = {}
+    if request.method == "POST":
+        action = request.POST.get("action")
+        enrollment_id = request.POST.get("enrollment_id", "").strip()
+        access_code = request.POST.get("access_code", "").strip()
+
+        if not enrollment_id or not access_code:
+            messages.error(request, "Please provide both Enrollment No. and Book Accession Code.")
+            return render(request, "management/renew_book.html", context)
+
+        # Look up active transaction
+        transaction = Transaction.objects.filter(
+            student__enrollment_id=enrollment_id,
+            book__access_code=access_code,
+            returned=False
+        ).select_related('student', 'book').first()
+
+        if not transaction:
+            messages.error(request, "No active issued book found for these details. You may have entered them incorrectly or the book is already returned.")
+            return render(request, "management/renew_book.html", {"enrollment_id": enrollment_id, "access_code": access_code})
+
+        if action == "lookup":
+            # Check if a pending request already exists
+            pending_request = RenewRequest.objects.filter(transaction=transaction, status='Pending').exists()
+            context.update({
+                "transaction": transaction,
+                "pending_request": pending_request,
+                "enrollment_id": enrollment_id,
+                "access_code": access_code
+            })
+
+        elif action == "submit":
+            # Prevent duplicate pending requests
+            if RenewRequest.objects.filter(transaction=transaction, status='Pending').exists():
+                messages.error(request, "You already have a pending renewal request for this book.")
+            else:
+                RenewRequest.objects.create(transaction=transaction)
+                messages.success(request, f"Renewal request for '{transaction.book.title}' sent to Admin successfully!")
+            return redirect('renew_request')
+
+    return render(request, 'management/renew_book.html', context)
+

@@ -49,6 +49,53 @@ These endpoints are used for generating, refreshing, and verifying JSON Web Toke
 - **Responses:**
   - `200 OK`: A JSON object with grouped endpoints mapped to their URLs.
 
+### `POST /api/register/`
+- **Description:** Create a new user account.
+- **Payload:**
+  ```json
+  {
+    "username": "new_user",
+    "email": "user@email.com",
+    "password": "secure_password"
+  }
+  ```
+- **Responses:**
+  - `201 Created`: User registered successfully.
+  - `400 Bad Request`: Validation errors (e.g., missing fields or duplicate username).
+
+### `POST /api/login/`
+- **Description:** Alias for `/api/token/`. Get JWT access and refresh tokens.
+
+### `POST /api/logout/`
+- **Description:** Blacklists the provided refresh token to securely log the user out. Requires Bearer Token authorization.
+- **Payload:**
+  ```json
+  {
+    "refresh": "your_refresh_token"
+  }
+  ```
+- **Responses:**
+  - `205 Reset Content`: Successfully logged out.
+  - `400 Bad Request`: Invalid or no token provided.
+
+### `POST /api/update-password/`
+- **Description:** Allows an authenticated user to change their password securely. Requires Bearer Token authorization.
+- **Payload:**
+  ```json
+  {
+    "old_password": "current_password",
+    "new_password": "new_secure_password"
+  }
+  ```
+- **Responses:**
+  - `200 OK`: Password updated successfully.
+  - `400 Bad Request`: Incorrect old password.
+
+### `DELETE /api/delete/`
+- **Description:** Deletes the authenticated user's account entirely. Requires Bearer Token authorization.
+- **Responses:**
+  - `204 No Content`: Account deleted successfully.
+
 ---
 
 ## 2. Report Download Endpoints
@@ -98,6 +145,16 @@ These endpoints are used to download data reports in `.xlsx` (Excel) format.
 - **Behavior:** 
   - Validates formatting (alphanumeric only).
   - Toggles between checking IN and checking OUT based on current status.
+
+### `GET, POST /renew/`
+- **Description:** Public portal for students to search active book issues and submit renewal requests to the admin.
+- **Methods:**
+  - `GET`: Renders the Book Renewal form.
+  - `POST`: Either looks up the book details (`action=lookup`) or submits the official renewal request to the database (`action=submit`).
+- **POST Payload (Form Data):**
+  - `enrollment_id`: Student's ID.
+  - `access_code`: The specific Book barcode.
+  - `action`: `lookup` or `submit`.
 
 ### `GET /dashboard/`
 - **Description:** Admin-only dashboard showing real-time statistics, including students currently inside the library and total historical visits.

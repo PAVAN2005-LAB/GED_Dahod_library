@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Book Renewal Request{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-lg border-0 rounded-4">
+            <!-- Header -->
+            <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
+                <h3 class="mb-0 fw-bold"><i class="fas fa-sync-alt me-2"></i> Book Renewal Request</h3>
+                <p class="mb-0 text-white-50 mt-1">Request a deadline extension from the Librarian</p>
+            </div>
+            
+            <div class="card-body p-5">
+                <!-- Alerts / Messages -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- Main Form that submits POST to the same view -->
+                <form method="POST" action="{% url 'renew_request' %}">
+                    {% csrf_token %}
+                    
+                    <!-- Search Inputs -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-secondary">Student Enrollment No.</label>
+                        <input type="text" name="enrollment_id" class="form-control form-control-lg bg-light" 
+                               placeholder="e.g. 210180107000" required 
+                               value="{{ enrollment_id|default:'' }}"
+                               {% if transaction %}readonly{% endif %}>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-secondary">Book Accession Code</label>
+                        <input type="text" name="access_code" class="form-control form-control-lg bg-light" 
+                               placeholder="Scan or type book code" required 
+                               value="{{ access_code|default:'' }}"
+                               {% if transaction %}readonly{% endif %}>
+                    </div>
+
+                    <!-- If transaction found, show details -->
+                    {% if transaction %}
+                        <hr class="my-4 text-muted">
+                        <div class="bg-light p-4 rounded-3 mb-4 border shadow-sm">
+                            <h5 class="fw-bold text-dark mb-3"><i class="fas fa-book-open me-2 text-primary"></i> Current Issue Details</h5>
+                            
+                            <div class="mb-2"><strong>Student Name:</strong> <span class="text-primary">{{ transaction.student.name }}</span></div>
+                            <div class="mb-2"><strong>Book Title:</strong> <span class="text-dark">{{ transaction.book.title }}</span></div>
+                            <div class="mb-2"><strong>Issued On:</strong> <span class="text-muted">{{ transaction.issue_date|date:"F j, Y, g:i a" }}</span></div>
+                            <div class="mb-3">
+                                <strong>Current Due Date:</strong> 
+                                {% if transaction.is_overdue %}
+                                    <span class="text-danger fw-bold"><i class="fas fa-exclamation-circle"></i> {{ transaction.due_date|date:"F j, Y, g:i a" }} (Overdue)</span>
+                                {% else %}
+                                    <span class="text-success fw-bold">{{ transaction.due_date|date:"F j, Y, g:i a" }}</span>
+                                {% endif %}
+                            </div>
+
+                            {% if pending_request %}
+                                <div class="alert alert-warning mb-0 border-warning">
+                                    <i class="fas fa-hourglass-half me-1"></i> You already have a pending renewal request for this book awaiting Admin approval.
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Action Buttons when Details are visible -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'renew_request' %}" class="btn btn-outline-secondary btn-lg px-4 me-md-2">Search Another</a>
+                            
+                            {% if not pending_request %}
+                                <button type="submit" name="action" value="submit" class="btn btn-primary btn-lg px-4 fw-bold shadow">
+                                    <i class="fas fa-paper-plane me-2"></i> Submit Renew Request
+                                </button>
+                            {% endif %}
+                        </div>
+
+                    <!-- If no transaction yet, show Lookup button -->
+                    {% else %}
+                        <div class="d-grid mt-5">
+                            <button type="submit" name="action" value="lookup" class="btn btn-primary btn-lg fw-bold shadow-sm">
+                                <i class="fas fa-search me-2"></i> Find My Book
+                            </button>
+                        </div>
+                    {% endif %}
+                </form>
+
+            </div>
+            <!-- Footer -->
+            <div class="card-footer text-center py-3 bg-light rounded-bottom-4 border-0">
+                <small class="text-muted"><i class="fas fa-shield-alt me-1"></i> This request will be sent securely to the Library Admin for approval.</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
