@@ -61,22 +61,33 @@
 <div class="mt-4 animate-fade-in" style="animation-delay: 0.2s;">
     <div class="row">
         <div class="col-md-4">
-            <div class="card bg-primary text-white p-3 mb-3">
-                <div class="d-flex justify-content-between">
+            <div class="card bg-primary text-white p-3 mb-3 glass-card border-0" style="background: var(--brand-gradient);">
+                <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h5>Currently In</h5>
-                        <h2 class="mb-0">{{ live_logs.count }}</h2>
+                        <h6 class="text-uppercase fw-bold mb-1 opacity-75">Live Now</h6>
+                        <h2 class="mb-0 fw-bold">{{ live_logs.count }}</h2>
                     </div>
                     <i class="fas fa-users fs-1 opacity-50"></i>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card bg-success text-white p-3 mb-3">
-                <div class="d-flex justify-content-between">
+            <div class="card bg-info text-white p-3 mb-3 glass-card border-0" style="background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);">
+                <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h5>Total Library Visits</h5>
-                        <h2 class="mb-0">{{ total_visits }}</h2>
+                        <h6 class="text-uppercase fw-bold mb-1 opacity-75">Today's Visits</h6>
+                        <h2 class="mb-0 fw-bold">{{ today_visits }}</h2>
+                    </div>
+                    <i class="fas fa-calendar-day fs-1 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-success text-white p-3 mb-3 glass-card border-0" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-uppercase fw-bold mb-1 opacity-75">Total to Date</h6>
+                        <h2 class="mb-0 fw-bold">{{ total_visits }}</h2>
                     </div>
                     <i class="fas fa-door-open fs-1 opacity-50"></i>
                 </div>

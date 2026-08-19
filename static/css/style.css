@@ -1,22 +1,23 @@
 /* =========================================
-   📚 Smart Library - Core Styles
+   📚 Smart Library - Core Styles (Minimalist)
    ========================================= */
 
 :root {
-    --primary-bg: #f3f4f6;
+    --primary-bg: #f8f9fa; /* Very light gray */
     --card-bg: #ffffff;
-    --text-main: #1f2937;
-    --text-muted: #6b7280;
-    --brand-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-    --success-color: #10b981;
-    --error-color: #ef4444;
-    --warning-color: #f59e0b;
+    --text-main: #202124; /* Google dark gray */
+    --text-muted: #5f6368; /* Google medium gray */
+    --brand-primary: #1a73e8; /* Google Blue */
+    --brand-gradient: #1a73e8; /* Replaced gradient with solid primary */
+    --success-color: #1e8e3e;
+    --error-color: #d93025;
+    --warning-color: #f9ab00;
 }
 
 body {
     background-color: var(--primary-bg);
     min-height: 100vh;
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-family: 'Inter', 'Roboto', system-ui, -apple-system, sans-serif;
     color: var(--text-main);
 }
 
@@ -26,58 +27,54 @@ body {
 }
 
 .glass-card {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 16px;
-    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+    background: var(--card-bg);
+    border: 1px solid #dadce0; /* Google style border */
+    border-radius: 8px; /* Slightly sharper corners */
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); /* Material shadow */
 }
 
 /* ── Typography ─────────────────────────── */
 .brand-text {
-    background: var(--brand-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: 800;
+    color: var(--brand-primary);
+    font-weight: 700;
 }
 
 h1,
 h2,
 h3 {
-    font-weight: 700;
-    letter-spacing: -0.025em;
+    font-weight: 600;
+    color: var(--text-main);
 }
 
 /* ── Alerts & Messages ──────────────────── */
 .alert {
-    border: none;
-    border-radius: 12px;
+    border: 1px solid transparent;
+    border-radius: 8px;
     padding: 1rem 1.5rem;
     margin-bottom: 1.5rem;
     display: flex;
     align-items: center;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    animation: slideIn 0.4s ease-out;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    animation: slideIn 0.3s ease-out;
 }
 
 .alert-error,
 .alert-danger {
-    background-color: #fef2f2;
-    color: #991b1b;
-    border-left: 4px solid var(--error-color);
+    background-color: #fce8e6;
+    color: #c5221f;
+    border-color: #f8dedc;
 }
 
 .alert-success {
-    background-color: #ecfdf5;
-    color: #065f46;
-    border-left: 4px solid var(--success-color);
+    background-color: #e6f4ea;
+    color: #137333;
+    border-color: #ceead6;
 }
 
 .alert-warning {
-    background-color: #fffbeb;
-    color: #92400e;
-    border-left: 4px solid var(--warning-color);
+    background-color: #fef7e0;
+    color: #b06000;
+    border-color: #feefc3;
 }
 
 /* ── Kiosk Specific ─────────────────────── */
@@ -90,33 +87,38 @@ h3 {
 
 .scanner-box {
     width: 100%;
-    max-width: 500px;
+    max-width: 550px;
     padding: 3rem;
     text-align: center;
 }
 
 .scanner-input {
-    font-size: 1.5rem;
-    letter-spacing: 2px;
+    font-size: 1.25rem;
+    letter-spacing: 1px;
     text-align: center;
-    border: 2px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 1rem;
+    border: 1px solid #dadce0;
+    border-radius: 24px; /* Pill shape like search bar */
+    padding: 0.75rem 1.5rem;
     width: 100%;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 6px rgba(32,33,36,0.28);
 }
 
 .scanner-input:focus {
-    border-color: #4f46e5;
-    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+    border-color: transparent;
+    box-shadow: 0 1px 6px rgba(32,33,36,0.28);
     outline: none;
+}
+
+.scanner-input:hover {
+    box-shadow: 0 1px 6px rgba(32,33,36,0.28);
 }
 
 /* ── Animations ─────────────────────────── */
 @keyframes slideIn {
     from {
         opacity: 0;
-        transform: translateY(-10px);
+        transform: translateY(-5px);
     }
 
     to {
@@ -126,40 +128,26 @@ h3 {
 }
 
 .animate-fade-in {
-    animation: slideIn 0.6s ease-out forwards;
+    animation: slideIn 0.4s ease-out forwards;
 }
 
 /* ── Buttons ────────────────────────────── */
 .btn-primary-gradient {
-    background: var(--brand-gradient);
+    background: var(--brand-primary);
     color: white;
     border: none;
-    font-weight: 600;
-    transition: transform 0.2s, box-shadow 0.2s;
+    font-weight: 500;
+    border-radius: 4px;
+    padding: 0.5rem 1.5rem;
+    transition: background-color 0.2s, box-shadow 0.2s;
 }
 
 .btn-primary-gradient:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
+    background: #174ea6; /* Darker blue on hover */
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
     color: white;
+    transform: none; /* Removed transform to keep it grounded */
 }
 
 /* ── Navbar ─────────────────────────────── */
-.navbar {
-    background: var(--brand-gradient);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-.navbar-brand,
-.nav-link {
-    color: white !important;
-    font-weight: 500;
-}
-
-.navbar-toggler {
-    border-color: rgba(255, 255, 255, 0.5);
-}
-
-.navbar-toggler-icon {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.9%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-}
+/* Navbar styles moved to base.html inline classes for BS5 utilities */

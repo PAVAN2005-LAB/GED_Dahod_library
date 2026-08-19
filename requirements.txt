@@ -7,5 +7,6 @@ whitenoise
 waitress
 pandas
 openpyxl
-psycopg2-binary
 dj-database-url
+gunicorn
+mysqlclient

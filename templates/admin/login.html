@@ -1,133 +1,235 @@
-{% extends "admin/base_site.html" %}
 {% load i18n static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | GEC Dahod Library Admin</title>
+    <link rel="icon" type="image/jpeg" href="{% static 'images/favicon.jpg' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-{% block extrastyle %}{{ block.super }}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
-<style>
-    body {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        margin: 0;
-    }
+        html, body {
+            height: 100%;
+            background: #f8f9fa;
+            font-family: 'Inter', 'Roboto', system-ui, sans-serif;
+            font-size: 13px;
+            color: #202124;
+        }
 
-    #container {
-        width: 100%;
-        max-width: 400px;
-        background: white;
-        padding: 40px;
-        border-radius: 16px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    }
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-    #header {
-        display: none;
-    }
+        /* ── Login card ─────────────────── */
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            background: #fff;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+            overflow: hidden;
+        }
 
-    .form-row {
-        margin-bottom: 20px;
-    }
+        /* ── Header banner ──────────────── */
+        .login-header {
+            background: #1a73e8;
+            border-bottom: 3px solid #1e8e3e;
+        }
 
-    label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: #333;
-    }
+        .logo-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 18px 22px 14px;
+        }
 
-    input[type="text"],
-    input[type="password"] {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        font-size: 16px;
-        transition: border 0.3s;
-    }
+        .logo-row img {
+            height: 52px;
+            width: 52px;
+            object-fit: contain;
+            flex-shrink: 0;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.4);
+        }
 
-    input:focus {
-        border-color: #4f46e5;
-        outline: none;
-    }
+        .logo-text h1 {
+            color: #fff;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            line-height: 1.4;
+        }
 
-    .submit-row {
-        text-align: center;
-        margin-top: 30px;
-    }
+        .logo-text p {
+            color: rgba(255,255,255,0.8);
+            font-size: 11px;
+            margin-top: 3px;
+        }
 
-    input[type="submit"] {
-        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-        color: white;
-        border: none;
-        padding: 12px 30px;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        width: 100%;
-        transition: transform 0.2s;
-    }
+        .banner-strip {
+            background: #1e8e3e;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 5px 14px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            text-align: center;
+        }
 
-    input[type="submit"]:hover {
-        transform: translateY(-2px);
-    }
+        /* ── Form body ──────────────────── */
+        .login-body {
+            background: #fff;
+            padding: 24px 26px 20px;
+        }
 
-    .errornote {
-        background: #fee2e2;
-        color: #991b1b;
-        padding: 15px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        border-left: 4px solid #ef4444;
-        font-size: 14px;
-    }
+        .login-body h2 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #202124;
+            border-bottom: 1px solid #f1f3f4;
+            padding-bottom: 10px;
+            margin-bottom: 18px;
+        }
 
-    .brand-logo {
-        text-align: center;
-        margin-bottom: 30px;
-        font-size: 24px;
-        font-weight: 800;
-        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-</style>
-{% endblock %}
+        .error-box {
+            background: #fce8e6;
+            border: 1px solid #f8dedc;
+            color: #c5221f;
+            padding: 10px 12px;
+            margin-bottom: 16px;
+            font-size: 12px;
+            border-radius: 4px;
+        }
 
-{% block content %}
-<div class="brand-logo">📚 GECDahod Library Login</div>
+        .form-row { margin-bottom: 14px; }
 
-{% if form.errors and not form.non_field_errors %}
-<p class="errornote">
-    {% if form.errors.items|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please
-    correct the errors below." %}{% endif %}
-</p>
-{% endif %}
+        .form-row label {
+            display: block;
+            font-weight: 500;
+            color: #5f6368;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
 
-{% if form.non_field_errors %}
-{% for error in form.non_field_errors %}
-<p class="errornote">
-    🛑 <strong>Login Failed:</strong> {{ error }}
-</p>
-{% endfor %}
-{% endif %}
+        .form-row input {
+            display: block;
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #dadce0;
+            background: #fff;
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            border-radius: 4px;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
 
-<form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
-    <div class="form-row">
-        <label for="id_username">Username / Email</label>
-        {{ form.username }}
-        {{ form.username.errors }}
+        .form-row input:focus {
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 2px rgba(26,115,232,0.2);
+        }
+
+        .submit-row {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .btn-login {
+            background: #1a73e8;
+            color: #fff;
+            border: none;
+            padding: 8px 24px;
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 4px;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3);
+            transition: background 0.15s, box-shadow 0.15s;
+        }
+
+        .btn-login:hover {
+            background: #174ea6;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+        }
+
+        /* ── Footer ─────────────────────── */
+        .login-footer {
+            background: #f8f9fa;
+            border-top: 1px solid #dadce0;
+            padding: 8px 14px;
+            text-align: center;
+            color: #5f6368;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-card">
+
+    <!-- Header -->
+    <div class="login-header">
+        <div class="logo-row">
+            <img src="{% static 'images/favicon.jpg' %}" alt="GEC Dahod Logo">
+            <div class="logo-text">
+                <h1>Government Engineering College<br>Dahod &mdash; Library System</h1>
+                <p>Estd. 2004 &bull; Gujarat Technological University</p>
+            </div>
+        </div>
+        <div class="banner-strip">&#9632; Administrator Login &bull; Restricted Access &#9632;</div>
     </div>
-    <div class="form-row">
-        <label for="id_password">Password</label>
-        {{ form.password }}
-        {{ form.password.errors }}
-        <input type="hidden" name="next" value="{{ next }}">
+
+    <!-- Form -->
+    <div class="login-body">
+        <h2>&#128274; Sign In to Continue</h2>
+
+        {% if form.errors %}
+        <div class="error-box">
+            <strong>Error:</strong> Incorrect username or password. Please try again.
+        </div>
+        {% endif %}
+
+        {% if form.non_field_errors %}
+        <div class="error-box">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <form method="post" action="{{ request.get_full_path }}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
+
+            <div class="form-row">
+                <label for="id_username">Username:</label>
+                <input type="text" name="username" id="id_username"
+                       autofocus required maxlength="150" autocomplete="username">
+            </div>
+
+            <div class="form-row">
+                <label for="id_password">Password:</label>
+                <input type="password" name="password" id="id_password"
+                       required autocomplete="current-password">
+            </div>
+
+            <div class="submit-row">
+                <input type="submit" value="Login &raquo;" class="btn-login">
+            </div>
+        </form>
     </div>
-    <div class="submit-row">
-        <input type="submit" value="{% trans 'Log in' %}">
+
+    <!-- Footer -->
+    <div class="login-footer">
+        &copy; {% now "Y" %} GEC Dahod Library &mdash; All rights reserved &bull; Developed by Students
     </div>
-</form>
-{% endblock %}
+
+</div>
+
+</body>
+</html>

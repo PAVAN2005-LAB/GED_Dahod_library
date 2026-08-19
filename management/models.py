@@ -62,6 +62,10 @@ class Book(models.Model):
     )
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=200, blank=True, null=True)
+    isbn_no = models.CharField(max_length=50, blank=True, null=True, verbose_name='ISBN No')
+    pages = models.IntegerField(blank=True, null=True, verbose_name='Total Pages')
+    edition = models.CharField(max_length=50, blank=True, null=True)
+    allocated_department = models.CharField(max_length=100, choices=Student.DEPARTMENT_CHOICES, blank=True, null=True)
     shelf_location = models.CharField(max_length=100)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Available')
     current_holder = models.ForeignKey(
@@ -166,3 +170,11 @@ class RenewRequest(models.Model):
 
     def __str__(self):
         return f"Renew Request for '{self.transaction.book.title}' by {self.transaction.student.name}"
+
+
+class ManualReminderProxy(models.Model):
+    """A proxy model just to add a link in the admin sidebar for manual reminders."""
+    class Meta:
+        managed = False
+        verbose_name_plural = 'Manual Due Reminders'
+

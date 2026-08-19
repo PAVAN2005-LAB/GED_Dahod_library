@@ -12,35 +12,50 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Custom CSS -->
     {% load static %}
+    <link rel="icon" type="image/jpeg" href="{% static 'images/favicon.jpg' %}">
+
+    <!-- Custom CSS -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <style>
+        * {
+            border-radius: 0 !important;
+            font-family: 'Times New Roman', serif !important;
+        }
+    </style>
 
     {% block extra_css %}{% endblock %}
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg mb-4">
+    <nav class="navbar navbar-expand-lg mb-4 bg-white shadow-sm py-3 border-bottom">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'kiosk' %}">
-                <i class="fas fa-book-reader me-2"></i>GECDahod Library
+            <a class="navbar-brand text-dark fw-bold" href="{% url 'kiosk' %}">
+                <img src="https://www.gecdahod.ac.in/imgs/main-logo2.png" alt="GEC Dahod Logo" height="30" class="me-2 d-inline-block align-text-top">
+                GECDahod Library
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'kiosk' %}">Kiosk</a>
+                        <a class="nav-link text-secondary fw-semibold px-3" href="{% url 'kiosk' %}">Kiosk</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'renew_request' %}">Renew a Book</a>
+                        <a class="nav-link text-secondary fw-semibold px-3" href="{% url 'book_search' %}">Book Search</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                        <a class="nav-link text-secondary fw-semibold px-3" href="{% url 'issue_book_manual' %}">Issue Book</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/admin/">Admin Panel</a>
+                        <a class="nav-link text-secondary fw-semibold px-3" href="{% url 'renew_request' %}">Renew a Book</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-secondary fw-semibold px-3" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                        <a class="btn btn-outline-primary rounded-pill px-4" href="/admin/">Admin Panel</a>
                     </li>
                 </ul>
             </div>
@@ -51,11 +66,14 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer>
+    <footer class="py-4 bg-white mt-auto border-top">
         <div class="container text-center text-muted">
-            <p class="mb-1">Developed for <strong>GEC Dahod Library</strong></p>
-            <p class="small">For technical support or contribution: <a href="mailto:pavan.yadav.sde@gmail.com"
-                    class="text-muted">pavan.yadav.sde@gmail.com</a> | 230180107045@gecdahod.ac.in</p>
+            <p class="mb-2">
+                <img src="https://www.gecdahod.ac.in/imgs/main-logo2.png" alt="Logo" height="24" class="me-2 opacity-75">
+                Developed for <strong><a href="https://www.gecdahod.ac.in/" target="_blank" class="text-decoration-none text-dark">GEC Dahod</a> Library</strong>
+            </p>
+            <p class="small mb-0">For technical support or contribution: <a href="mailto:pavan.yadav.sde@gmail.com"
+                    class="text-muted text-decoration-none">pavan.yadav.sde@gmail.com</a> | 230180107045@gecdahod.ac.in</p>
         </div>
     </footer>
 

@@ -13,16 +13,16 @@ def start():
 
 
 
-    # Task B: Daily at 8 AM — send due book reminders
-    scheduler.add_job(
-        send_due_reminders,
-        trigger="cron",
-        hour=8,
-        minute=0,
-        id="send_due_reminders",
-        max_instances=1,
-        replace_existing=True,
-    )
+    # Task B: Daily at 8 AM — send due book reminders (DISABLED PER USER REQUEST)
+    # scheduler.add_job(
+    #     send_due_reminders,
+    #     trigger="cron",
+    #     hour=8,
+    #     minute=0,
+    #     id="send_due_reminders",
+    #     max_instances=1,
+    #     replace_existing=True,
+    # )
 
     register_events(scheduler)
     scheduler.start()

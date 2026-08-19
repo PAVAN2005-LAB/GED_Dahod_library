@@ -1,9 +1,31 @@
 from django.contrib import admin
 from django.contrib.auth.models import User, Group
 from .models import Student, Book, LibraryLog, Transaction
+from django.utils import timezone
+from datetime import timedelta
 
 
-# ── Customize Admin Site Branding ───────────────────────────
+# ── Inject live stats into the admin index context ──────────────
+_original_index = admin.AdminSite.index
+
+def _index_with_stats(self, request, extra_context=None):
+    from .models import Student, Book, LibraryLog, Transaction, RenewRequest
+    extra_context = extra_context or {}
+    extra_context['stats'] = {
+        'total_students':   Student.objects.count(),
+        'total_books':      Book.objects.count(),
+        'books_available':  Book.objects.filter(status='Available').count(),
+        'books_issued':     Book.objects.filter(status='Issued').count(),
+        'inside_now':       LibraryLog.objects.filter(exit_time__isnull=True).count(),
+        'overdue':          Transaction.objects.filter(returned=False, due_date__lt=timezone.now()).count(),
+        'pending_renewals': RenewRequest.objects.filter(status='Pending').count(),
+    }
+    return _original_index(self, request, extra_context=extra_context)
+
+admin.AdminSite.index = _index_with_stats
+
+
+# ── Admin Site Branding ────────────────────────────────────
 admin.site.site_header = 'GECDahod Library'
 admin.site.site_title = 'GECDahod Library Admin'
 admin.site.index_title = 'Library Management Panel'
@@ -21,9 +43,9 @@ class StudentAdmin(admin.ModelAdmin):
 # ── Book Admin ──────────────────────────────────────────────
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ('access_code', 'title', 'author', 'shelf_location', 'status', 'current_holder')
-    list_filter = ('status', 'shelf_location')
-    search_fields = ('access_code', 'title', 'author')
+    list_display = ('access_code', 'title', 'isbn_no', 'author', 'edition', 'allocated_department', 'status', 'current_holder')
+    list_filter = ('status', 'allocated_department', 'shelf_location')
+    search_fields = ('access_code', 'title', 'author', 'isbn_no')
     list_per_page = 25
 
 
@@ -36,17 +58,7 @@ class LibraryLogAdmin(admin.ModelAdmin):
     readonly_fields = ('entry_time',)
     autocomplete_fields = ['student']
     list_per_page = 25
-    actions = ['clear_old_logs']
-
-    @admin.action(description='Clear logs older than 30 days')
-    def clear_old_logs(self, request, queryset):
-        from django.utils import timezone
-        from datetime import timedelta
-        cutoff = timezone.now() - timedelta(days=30)
-        old_logs = LibraryLog.objects.filter(entry_time__lt=cutoff)
-        count = old_logs.count()
-        old_logs.delete()
-        self.message_user(request, f"Successfully deleted {count} logs older than 30 days.")
+    actions = []
 
     @admin.display(boolean=True, description='Currently Inside')
     def is_inside(self, obj):
@@ -114,3 +126,14 @@ class RenewRequestAdmin(admin.ModelAdmin):
             req.status = 'Approved'
             req.save()
         self.message_user(request, 'Selected requests have been approved and due dates extended.')
+
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from .models import ManualReminderProxy
+
+@admin.register(ManualReminderProxy)
+class ManualReminderProxyAdmin(admin.ModelAdmin):
+    def changelist_view(self, request, extra_context=None):
+        # Redirect directly to our custom manual reminder view
+        return HttpResponseRedirect(reverse('admin_manual_reminder'))
+

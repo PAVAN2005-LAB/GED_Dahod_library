@@ -3,6 +3,7 @@ import pandas as pd
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
+from django.shortcuts import render
 from django.utils import timezone
 from .models import Student, LibraryLog, Transaction
 
@@ -70,6 +71,11 @@ def download_entry_exit(request):
             'Entry Time', 'Exit Time', 'Duration'
         ]
 
+    mode = request.GET.get('mode', 'download')
+    if mode == 'preview':
+        html_table = df.head(15).to_html(classes='preview-table', index=False)
+        return render(request, 'admin/report_preview.html', {'html_table': html_table, 'title': 'Entry-Exit Preview'})
+
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='openpyxl') as writer:
         df.to_excel(writer, index=False, sheet_name='Entry-Exit Report')
@@ -83,7 +89,8 @@ def download_entry_exit(request):
     response['Content-Disposition'] = f'attachment; filename="entry_exit_report_{timestamp}.xlsx"'
     return response
 
-
+# we can also use @login_required decorator instead of @staff_member_required
+# @login_required(login_url='/admin/login/')    
 @staff_member_required(login_url='/admin/login/')
 def download_book_issues(request):
     """Download filtered Book Issue report."""
@@ -145,6 +152,11 @@ def download_book_issues(request):
             'Issue Date', 'Due Date', 'Status'
         ]
 
+    mode = request.GET.get('mode', 'download')
+    if mode == 'preview':
+        html_table = df.head(15).to_html(classes='preview-table', index=False)
+        return render(request, 'admin/report_preview.html', {'html_table': html_table, 'title': 'Book Issues Preview'})
+
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='openpyxl') as writer:
         df.to_excel(writer, index=False, sheet_name='Book Issues Report')
@@ -205,6 +217,11 @@ def download_overdue_students(request):
             'Enrollment ID', 'Student Name', 'Department', 'Mobile No',
             'Book Title', 'Author', 'Access Code', 'Due Date', 'Overdue Days'
         ]
+
+    mode = request.GET.get('mode', 'download')
+    if mode == 'preview':
+        html_table = df.head(15).to_html(classes='preview-table', index=False)
+        return render(request, 'admin/report_preview.html', {'html_table': html_table, 'title': 'Overdue Students Preview'})
 
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='openpyxl') as writer:

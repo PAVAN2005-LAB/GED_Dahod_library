@@ -12,23 +12,28 @@
 
     .report-card {
         background: #fff;
-        border: 1px solid #dfe3e8;
-        border-radius: 12px;
+        border: 2px solid #ccc;
+        border-radius: 0;
         padding: 30px;
         margin-bottom: 30px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     }
 
     .report-card h2 {
-        color: #417690;
-        font-size: 20px;
+        color: #333;
+        font-family: 'Times New Roman', serif;
+        font-size: 22px;
         margin: 0 0 5px;
+        text-transform: uppercase;
+        border-bottom: 1px dashed #999;
+        padding-bottom: 10px;
     }
 
     .report-card p.desc {
-        color: #888;
-        font-size: 13px;
-        margin: 0 0 20px;
+        color: #555;
+        font-size: 14px;
+        margin: 10px 0 20px;
+        font-family: monospace;
     }
 
     .filter-grid {
@@ -39,11 +44,9 @@
     }
 
     .filter-grid label {
-        font-size: 12px;
-        font-weight: 600;
-        color: #555;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+        font-size: 13px;
+        font-weight: bold;
+        color: #000;
         display: block;
         margin-bottom: 4px;
     }
@@ -51,43 +54,50 @@
     .filter-grid input,
     .filter-grid select {
         width: 100%;
-        padding: 8px 12px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
+        padding: 6px 10px;
+        border: 1px solid #777;
+        border-radius: 0;
         font-size: 14px;
-        background: #fafafa;
+        background: #fdfdfd;
+        box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.1);
     }
 
-    .filter-grid input:focus,
-    .filter-grid select:focus {
-        outline: none;
-        border-color: #417690;
-        background: #fff;
+    .btn-action {
+        display: inline-block;
+        padding: 8px 20px;
+        color: #fff;
+        border: 1px solid #333;
+        border-radius: 0;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        text-decoration: none;
+        box-shadow: 2px 2px 0px #333;
+        margin-right: 10px;
+        background: #007bff;
+        text-shadow: 1px 1px 0px #000;
+    }
+
+    .btn-action:active {
+        box-shadow: 0px 0px 0px #333;
+        transform: translate(2px, 2px);
+    }
+
+    .btn-preview {
+        background: #6c757d;
     }
 
     .btn-download {
-        display: inline-block;
-        padding: 10px 28px;
-        background: linear-gradient(135deg, #28a745, #218838);
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        text-decoration: none;
-        transition: transform 0.2s, box-shadow 0.2s;
+        background: #28a745;
     }
 
-    .btn-download:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
-        color: #fff;
+    .btn-danger-custom {
+        background: #dc3545;
     }
 
     .divider {
         border: none;
-        border-top: 2px solid #eef1f5;
+        border-top: 1px solid #333;
         margin: 10px 0 30px;
     }
 
@@ -121,7 +131,8 @@
         <p class="desc">Download day-to-day entry/exit records with enrollment ID, name, department, mobile,
             and time duration.</p>
         <hr class="divider">
-        <form method="get" action="{% url 'report_entry_exit' %}">
+        <form method="get" action="{% url 'report_entry_exit' %}" id="form_entry_exit">
+            <input type="hidden" name="mode" id="mode_entry_exit" value="download">
             <div class="filter-grid">
                 <div>
                     <label>From Date</label>
@@ -136,7 +147,9 @@
                     <input type="text" name="department" list="dept_options" placeholder="Select or type Department...">
                 </div>
             </div>
-            <button type="submit" class="btn-download">📥 Download Entry-Exit Excel</button>
+            <button type="submit" onclick="document.getElementById('mode_entry_exit').value='preview'" class="btn-action btn-preview">👁️ Preview Data</button>
+            <button type="submit" onclick="document.getElementById('mode_entry_exit').value='download'" class="btn-action btn-download">📥 Download
+                Excel</button>
         </form>
     </div>
 
@@ -146,7 +159,8 @@
         <p class="desc">Download customized book issue records — who borrowed which book, when, due date, and return
             status.</p>
         <hr class="divider">
-        <form method="get" action="{% url 'report_book_issues' %}">
+        <form method="get" action="{% url 'report_book_issues' %}" id="form_book_issues">
+            <input type="hidden" name="mode" id="mode_book_issues" value="download">
             <div class="filter-grid">
                 <div>
                     <label>From Date</label>
@@ -165,17 +179,20 @@
                     <input type="text" name="status" list="status_options" placeholder="Select Status...">
                 </div>
             </div>
-            <button type="submit" class="btn-download">📥 Download Book Issues Excel</button>
+            <button type="submit" onclick="document.getElementById('mode_book_issues').value='preview'" class="btn-action btn-preview">👁️ Preview Data</button>
+            <button type="submit" onclick="document.getElementById('mode_book_issues').value='download'" class="btn-action btn-download">📥 Download
+                Excel</button>
         </form>
     </div>
 
     <!-- ═══ Overdue Students Report ═══ -->
     <div class="report-card">
-        <h2>⚠️ Overdue Students Report</h2>
+        <h2> Overdue Students Report</h2>
         <p class="desc">Download a list of students who have overdue books, including contact details and number of
             overdue days.</p>
         <hr class="divider">
-        <form method="get" action="{% url 'report_overdue_students' %}">
+        <form method="get" action="{% url 'report_overdue_students' %}" id="form_overdue">
+            <input type="hidden" name="mode" id="mode_overdue" value="download">
             <div class="filter-grid">
                 <div>
                     <label>From Issue Date</label>
@@ -190,9 +207,9 @@
                     <input type="text" name="department" list="dept_options" placeholder="Select or type Department...">
                 </div>
             </div>
-            <button type="submit" class="btn-download"
-                style="background: linear-gradient(135deg, #dc3545, #a71d2a); box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);">📥
-                Download Overdue Students Excel</button>
+            <button type="submit" onclick="document.getElementById('mode_overdue').value='preview'" class="btn-action btn-preview">👁️ Preview Data</button>
+            <button type="submit" onclick="document.getElementById('mode_overdue').value='download'" class="btn-action btn-danger-custom">📥 Download
+                Overdue Excel</button>
         </form>
     </div>
 

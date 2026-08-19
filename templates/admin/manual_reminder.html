@@ -1,0 +1,109 @@
+{% extends "admin/base_site.html" %}
+
+{% block title %}✉️ Send Manual Reminder{% endblock %}
+
+{% block content %}
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 40px auto;
+        background: #fff;
+        border: 2px solid #ccc;
+        padding: 30px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    
+    .form-container h2 {
+        font-family: 'Times New Roman', serif;
+        border-bottom: 2px solid #333;
+        padding-bottom: 10px;
+        margin-top: 0;
+        color: #333;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 14px;
+        font-weight: bold;
+        color: #000;
+        margin-bottom: 8px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #777;
+        font-size: 16px;
+        box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1);
+        font-family: monospace;
+    }
+
+    .btn-send {
+        display: inline-block;
+        padding: 10px 20px;
+        background: #007bff;
+        color: white;
+        border: 1px solid #333;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 2px 2px 0px #333;
+        text-shadow: 1px 1px 0px #000;
+    }
+
+    .btn-send:active {
+        box-shadow: 0px 0px 0px #333;
+        transform: translate(2px, 2px);
+    }
+
+    .alert {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+    }
+    .alert-error {
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+    }
+    .alert-success {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+    }
+    .alert-warning {
+        color: #856404;
+        background-color: #fff3cd;
+        border-color: #ffeeba;
+    }
+</style>
+
+<div class="form-container">
+    <h2>✉️ Send Manual Reminder</h2>
+    <p style="font-family: monospace; color: #555; margin-bottom: 20px;">
+        Enter a student's enrollment number below. This will instantly send an email reminder for ALL active books they currently hold.
+    </p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="enrollment_id">Student Enrollment No.</label>
+            <input type="text" name="enrollment_id" id="enrollment_id" placeholder="e.g. 230180107045" required autofocus>
+        </div>
+        
+        <button type="submit" class="btn-send">📤 Send Reminder Email</button>
+    </form>
+</div>
+{% endblock %}
