@@ -230,7 +230,7 @@ python manage.py import_data students /path/to/your/students.csv
 
 ### Import Books
 
-*Required CSV columns: `access_code`, `title`, `author`, `shelf_location`*
+*Required CSV columns: `access_code`, `title`, `author`, `isbn_no`, `pages`, `edition`, `allocated_department`, `shelf_location`*
 
 ```bash
 python manage.py import_data books /path/to/your/books.csv

@@ -65,7 +65,7 @@ class Command(BaseCommand):
 
     def import_books(self, file_path):
         """
-        Expected CSV: access_code, title, author, shelf_location
+        Expected CSV: access_code, title, author, isbn_no, pages, edition, allocated_department, shelf_location
         """
         self.stdout.write('Starting Book import...')
         count = 0
@@ -84,10 +84,17 @@ class Command(BaseCommand):
                     self.stdout.write(self.style.WARNING(f'Skipping duplicate book: {acid}'))
                     continue
 
+                pages_val = row.get('pages', '').strip()
+                pages = int(pages_val) if pages_val.isdigit() else None
+
                 books_to_create.append(Book(
                     access_code=acid,
                     title=row.get('title', '').strip(),
                     author=row.get('author', '').strip(),
+                    isbn_no=row.get('isbn_no', '').strip() or None,
+                    pages=pages,
+                    edition=row.get('edition', '').strip() or None,
+                    allocated_department=row.get('allocated_department', '').strip() or None,
                     shelf_location=row.get('shelf_location', 'General').strip(),
                     status='Available'
                 ))

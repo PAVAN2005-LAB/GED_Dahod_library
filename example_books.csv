@@ -1,4 +1,4 @@
-access_code,title,author,shelf_location
-BK001,Introduction to Algorithms,Cormen,A-1
-BK002,Clean Code,Robert Cecil Martin,A-2
-BK003,Design Patterns,Gang of Four,B-1
+access_code,title,author,isbn_no,pages,edition,allocated_department,shelf_location
+BK001,Introduction to Algorithms,Cormen,9780262033848,1312,3rd,Computer,A-1
+BK002,Clean Code,Robert Cecil Martin,9780132350884,464,1st,Computer,A-2
+BK003,Design Patterns,Gang of Four,9780201633610,395,1st,Computer,B-1
